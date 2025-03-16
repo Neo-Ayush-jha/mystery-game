@@ -8,7 +8,7 @@
 
 # Ignore virtual environments
 venv/
-env/
+.env/
 
 # Ignore node modules
 node_modules/
