@@ -9,6 +9,9 @@
 # Ignore virtual environments
 venv/
 .env/
+.env
+**/.env
+
 
 # Ignore node modules
 node_modules/
