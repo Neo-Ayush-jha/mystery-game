@@ -1,1 +1,25 @@
-*.env
+# Ignore compiled code
+*.pyc
+*.o
+*.exe
+
+# Ignore log files
+*.log
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore node modules
+node_modules/
+
+# Ignore configuration files
+config.ini
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
