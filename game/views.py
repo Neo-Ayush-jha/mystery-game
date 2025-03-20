@@ -15,7 +15,6 @@ def generate_case(request):
     """
     Generates a crime case in the user's chosen language using Google Gemini and saves it in the database.
     """
-
     # Get language from request, default to English
     language = request.data.get("language", "English")
 
@@ -32,7 +31,10 @@ def generate_case(request):
     Evidence 1: [Evidence Description], Key Evidence - [Yes/No]
     Evidence 2: [Evidence Description], Key Evidence - [Yes/No]
 
-    Ensure that title, description, suspects, and evidence are always present. The response should be entirely in {language}.
+    Crime Execution: [Describe exactly how the crime was committed]
+    Culprit's Actions: [Explain how the guilty suspect planned and executed the crime]
+
+    Ensure that title, description, suspects, evidence, and crime execution details are always present. The response should be entirely in {language}.
     """
 
     try:
@@ -43,21 +45,28 @@ def generate_case(request):
         case_data = response_text.split("\n")
 
         # Extract title and description
-        title, description = "", ""
+        title, description, crime_execution, culprit_actions = "", "", "", ""
         for line in case_data:
             if line.startswith("Title: "):
                 title = line.replace("Title: ", "").strip()
             elif line.startswith("Description: "):
                 description = line.replace("Description: ", "").strip()
+            elif line.startswith("Crime Execution: "):
+                crime_execution = line.replace("Crime Execution: ", "").strip()
+            elif line.startswith("Culprit's Actions: "):
+                culprit_actions = line.replace("Culprit's Actions: ", "").strip()
 
         # Validate extracted values
-        if not title or not description:
-            return Response({"error": f"Missing title or description in AI response (Language: {language})"}, status=500)
+        if not title or not description or not crime_execution or not culprit_actions:
+            return Response({"error": f"Missing required fields in AI response (Language: {language})"}, status=500)
 
         # Create case
-        case = Case.objects.create(title=title, description=description)
+        case = Case.objects.create(
+            title=title, description=description, crime_execution=crime_execution, culprit_actions=culprit_actions
+        )
 
         # Extract suspects
+        guilty_suspect = None
         for line in case_data:
             if line.startswith("Suspect"):
                 parts = line.split(", Alibi - ")
@@ -68,7 +77,11 @@ def generate_case(request):
                 alibi = parts[1].strip()
                 is_guilty = random.choice([True, False])
 
-                Suspect.objects.create(case=case, name=name, alibi=alibi, is_guilty=is_guilty, age=random.randint(25, 60))
+                suspect = Suspect.objects.create(
+                    case=case, name=name, alibi=alibi, is_guilty=is_guilty, age=random.randint(25, 60)
+                )
+                if is_guilty:
+                    guilty_suspect = suspect
 
         # Extract evidence
         for line in case_data:
@@ -87,6 +100,8 @@ def generate_case(request):
             "case_id": case.case_id,
             "title": case.title,
             "description": case.description,
+            "crime_execution": case.crime_execution,
+            "culprit_actions": case.culprit_actions,
             "language": language
         })
 
@@ -133,9 +148,8 @@ def interrogate_suspect(request, suspect_id):
 @api_view(["GET"])
 def case_details(request, case_id):
     """
-    Fetch complete details of a case, including suspects and evidence.
+    Fetch complete details of a case, including suspects, evidence, and crime execution details.
     """
-
     try:
         # Fetch case
         case = Case.objects.get(case_id=case_id)
@@ -151,6 +165,8 @@ def case_details(request, case_id):
             "case_id": case.case_id,
             "title": case.title,
             "description": case.description,
+            "crime_execution": case.crime_execution,
+            "culprit_actions": case.culprit_actions,
             "is_solved": case.is_solved,
             "created_at": case.created_at,
             "suspects": list(suspects),
