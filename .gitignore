@@ -133,13 +133,13 @@ celerybeat.pid
 
 # Environments
 .venv
-.myenv
+.env
 venv/
-myenv/
+env/
 ENV/
 env.bak/
 venv.bak/
-myenv.bak/
+env.bak/
 
 # Spyder project settings
 .spyderproject
@@ -182,9 +182,11 @@ img/
 .env
 .env/
 env/
-.myenv/
-.myenv/
-*myenv/
-myenv/
-*myenv/
-*.myenv/
+.env/
+.env/
+*env/
+env/
+*env/
+*.env/
+
+.env
