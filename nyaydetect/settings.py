@@ -11,14 +11,26 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
-import os
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 from dotenv import load_dotenv
+import pymysql
+pymysql.install_as_MySQLdb()
 
 # Load .env file
-load_dotenv()
+# load_dotenv()
+
+
+# Load environment variables
+# load_dotenv(os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env'))
+
+ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
+
+# Load environment variables from .env
+load_dotenv(ENV_PATH)
+print("Database Password from .env:", os.environ.get("DATABASE_PASSWORD"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -89,13 +101,37 @@ WSGI_APPLICATION = 'nyaydetect.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': 'nyaydetect',
+        # 'USER': 'postgres',
+        # 'PASSWORD': 'ayush911',
+        # 'HOST':'localhost',
+        # 'PORT': '5432',  
+#     }
+# }
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DATABASE_NAME'),
+        'USER': os.environ.get('DATABASE_USER'),
+        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
+        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PORT': os.environ.get('DATABASE_PORT', '5432'),
     }
 }
+
+
 
 
 # Password validation
@@ -143,8 +179,8 @@ GOOGLE_GEMINI_API_KEY = "GOOGLE_GEMINI_API_KEY"
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = BASE_DIR / 'media'
-STATICFILES_DIRS = [BASE_DIR / 'static']
+MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
+# STATICFILES_DIRS = [BASE_DIR / 'static']
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = [
