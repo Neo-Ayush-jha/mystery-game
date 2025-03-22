@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -132,7 +133,7 @@ DATABASES = {
 }
 
 
-
+DATABASES['default'] = dj_database_url.parse("postgresql://nyaydetect_user:YTqmwJMvYB0En9ddfSgpsl0JXYnqGauZ@dpg-cvfad5popnds73b8892g-a.oregon-postgres.render.com/nyaydetect")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
