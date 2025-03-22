@@ -38,7 +38,8 @@ print("Database Password from .env:", os.environ.get("DATABASE_PASSWORD"))
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-(kz4l0cg)=-tw5b7&q$(x!=k!r4nv47536*g-o460a(w*=6_=4'
+
+SECRET_KEY = os.environ.get('DATABASE_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -109,17 +110,6 @@ WSGI_APPLICATION = 'nyaydetect.wsgi.application'
 #     }
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'nyaydetect',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'ayush911',
-        # 'HOST':'localhost',
-        # 'PORT': '5432',  
-#     }
-# }
-
 
 DATABASES = {
     'default': {
@@ -133,7 +123,7 @@ DATABASES = {
 }
 
 
-DATABASES['default'] = dj_database_url.parse("postgresql://nyaydetect_user:YTqmwJMvYB0En9ddfSgpsl0JXYnqGauZ@dpg-cvfad5popnds73b8892g-a.oregon-postgres.render.com/nyaydetect")
+DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
