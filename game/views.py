@@ -177,3 +177,60 @@ def case_details(request, case_id):
 
     except Case.DoesNotExist:
         return Response({"error": "Case not found"}, status=404)
+
+
+@api_view(["POST"])
+def solve_case(request, case_id):
+    """
+    Allows the user to solve a case by guessing the suspect.
+    If the guessed suspect is guilty, the case is marked as solved.
+    """
+    try:
+        case = Case.objects.get(case_id=case_id)
+
+        # Check if the case is already solved
+        if case.is_solved:
+            return Response({"message": "This case is already solved."}, status=200)
+
+        # Get guessed suspect ID from request
+        guessed_suspect_id = request.data.get("suspect_id")
+        if not guessed_suspect_id:
+            return Response({"error": "Please provide a suspect_id to guess."}, status=400)
+
+        # Fetch the guessed suspect
+        try:
+            guessed_suspect = Suspect.objects.get(id=guessed_suspect_id, case=case)
+        except Suspect.DoesNotExist:
+            return Response({"error": "Suspect not found in this case."}, status=404)
+
+        # Check if the guessed suspect is the actual culprit
+        if guessed_suspect.is_guilty:
+            case.is_solved = True
+            case.save()
+            return Response({
+                "message": "Congratulations! You solved the case.",
+                "case_id": case.case_id,
+                "title": case.title,
+                "is_solved": case.is_solved,
+                "culprit": guessed_suspect.name
+            }, status=200)
+        else:
+            return Response({
+                "message": "Wrong guess! The case remains unsolved.",
+                "case_id": case.case_id,
+                "title": case.title,
+                "is_solved": case.is_solved,
+                "guessed_suspect": guessed_suspect.name
+            }, status=200)
+
+    except Case.DoesNotExist:
+        return Response({"error": "Case not found"}, status=404)
+
+
+@api_view(["GET"])
+def total_cases(request):
+    """
+    Returns the total number of cases in the Case model.
+    """
+    case_count = Case.objects.count()
+    return Response({"total_cases": case_count}, status=200)

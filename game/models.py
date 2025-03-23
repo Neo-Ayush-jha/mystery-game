@@ -1,11 +1,6 @@
 from django.db import models
 
 class Case(models.Model):
-    # case_id = models.AutoField(primary_key=True)
-    # title = models.CharField(max_length=255)
-    # description = models.TextField()
-    # is_solved = models.BooleanField(default=False)
-    # created_at = models.DateTimeField(auto_now_add=True)
     case_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     description = models.TextField()
