@@ -7,7 +7,7 @@ from .models import Case, Suspect, Evidence
 
 # Configure Gemini API
 # genai.configure(api_key="YOUR_GEMINI_API_KEY")
-genai.configure(api_key="AIzaSyBzMqKGU0PcloCb6mhP8sf8f8GHqqCrmEw")
+genai.configure(api_key="AIzaSyA5d52z8MQgOJj5Y-pkrYhl21VW432om3c")
 model = genai.GenerativeModel("gemini-1.5-pro")
 
 @api_view(["POST"])
@@ -19,23 +19,28 @@ def generate_case(request):
     language = request.data.get("language", "English")
 
     prompt = f"""
-    Generate a unique crime case in {language}. Follow this exact format:
-    
-    Title: [Crime Title]
-    Description: [Short crime description]
+        You are an expert crime fiction writer.
+        
+        Generate a highly detailed, unique, and intriguing fictional crime case in {language}. The case should feel like a real investigation. Follow this strict format:
+        
+        Title: [A compelling title]
+        Description: [A brief but gripping overview of the crime]
+        
+        Suspect 1: Name - [Full Name], Age - [Age], Profession - [Job], Alibi - [Detailed alibi including time, location, witness if any]
+        Suspect 2: Name - [Full Name], Age - [Age], Profession - [Job], Alibi - [Detailed alibi]
+        Suspect 3: Name - [Full Name], Age - [Age], Profession - [Job], Alibi - [Detailed alibi]
+        
+        Evidence 1: [Detailed evidence description with where it was found and who it links to], Key Evidence - [Yes/No]
+        Evidence 2: [Detailed evidence description], Key Evidence - [Yes/No]
+        Evidence 3: [Optional: Add more depth if needed], Key Evidence - [Yes/No]
+        
+        Crime Execution: [Explain step-by-step how the crime was planned and executed. Include location, method, time of day, tools used, and sequence of events.]
+        
+        Culprit's Actions: [Reveal which suspect is the true culprit and how they manipulated others, tampered with evidence, and tried to cover their tracks. Make it clever.]
+        
+        Avoid clichés. Make each suspect's alibi plausible and layered. The tone should be immersive and realistic, like a detective novel. Write entirely in {language}.
+        """
 
-    Suspect 1: Name - [Suspect Name], Alibi - [Suspect Alibi]
-    Suspect 2: Name - [Suspect Name], Alibi - [Suspect Alibi]
-    Suspect 3: Name - [Suspect Name], Alibi - [Suspect Alibi]
-
-    Evidence 1: [Evidence Description], Key Evidence - [Yes/No]
-    Evidence 2: [Evidence Description], Key Evidence - [Yes/No]
-
-    Crime Execution: [Describe exactly how the crime was committed]
-    Culprit's Actions: [Explain how the guilty suspect planned and executed the crime]
-
-    Ensure that title, description, suspects, evidence, and crime execution details are always present. The response should be entirely in {language}.
-    """
 
     try:
         response = model.generate_content(prompt)

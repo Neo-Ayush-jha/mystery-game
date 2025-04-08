@@ -31,7 +31,7 @@ ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 
 # Load environment variables from .env
 load_dotenv(ENV_PATH)
-print("Database Password from .env:", os.environ.get("DATABASE_PASSWORD"))
+print("Database Password from .env:", os.environ.get("DATABASE_SECRET_KEY"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -39,7 +39,8 @@ print("Database Password from .env:", os.environ.get("DATABASE_PASSWORD"))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 
-SECRET_KEY = os.environ.get('DATABASE_SECRET_KEY')
+# SECRET_KEY = os.environ.get('DATABASE_SECRET_KEY')
+SECRET_KEY = 'django-insecure-(kz4l0cg)=-tw5b7&q$(x!=k!r4nv47536*g-o460a(w*=6_=4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -123,7 +124,7 @@ DATABASES = {
 }
 
 
-DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
+# DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
