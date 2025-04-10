@@ -7,4 +7,5 @@ urlpatterns = [
     path("solve_case/<int:case_id>/", solve_case, name="solve_case"),
     path("case-details/<int:case_id>/", case_details, name="case_details"),
     path('interrogate-suspect/<int:suspect_id>/', interrogate_suspect, name='interrogate_suspect'),
+    path('chatbot/', chat_with_bot, name='chat_with_bot'),
 ]

@@ -239,3 +239,73 @@ def total_cases(request):
     """
     case_count = Case.objects.count()
     return Response({"total_cases": case_count}, status=200)
+
+
+@api_view(["POST"])
+def chat_with_bot(request):
+    message = request.data.get("message", "")
+    language = request.data.get("language", "English")
+
+    if not message:
+        return Response({
+            "status": "error",
+            "message": "Please provide a message.",
+            "data": None
+        }, status=400)
+
+    prompt = f"""
+    You are a helpful and friendly AI assistant named NyayVaani.
+    Respond to the following user message in a friendly and intelligent way.
+    Always reply in {language}.
+
+    Message: "{message}"
+    """
+
+    try:
+        response = model.generate_content(prompt)
+        ai_reply = response.text.strip()
+
+        return Response({
+            "status": "success",
+            "message": "Bot response generated successfully.",
+            "data": {
+                "user_message": message,
+                "bot_reply": ai_reply,
+                "language": language
+            }
+        }, status=200)
+
+    except Exception as e:
+        return Response({
+            "status": "error",
+            "message": "Something went wrong while generating the response.",
+            "data": str(e)
+        }, status=500)
+    """
+    Simple chatbot that uses Gemini to reply to user messages.
+    Expects a 'message' and optional 'language'.
+    """
+    message = request.data.get("message", "")
+    language = request.data.get("language", "English")
+
+    if not message:
+        return Response({"error": "Please provide a message."}, status=400)
+
+    prompt = f"""
+    You are a smart and friendly chatbot named NyayVaani.
+    Reply to the following message in a helpful and conversational way.
+    Language: {language}
+
+    Message from user: "{message}"
+    """
+
+    try:
+        response = model.generate_content(prompt)
+        ai_reply = response.text.strip()
+        return Response({
+            "user_message": message,
+            "bot_reply": ai_reply,
+            "language": language
+        })
+    except Exception as e:
+        return Response({"error": str(e)}, status=500)
