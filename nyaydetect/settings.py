@@ -31,7 +31,7 @@ ENV_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), '.env')
 
 # Load environment variables from .env
 load_dotenv(ENV_PATH)
-print("Database Password from .env:", os.environ.get("DATABASE_SECRET_KEY"))
+# print("Database Password from .env:", os.environ.get("DATABASE_SECRET_KEY"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -115,16 +115,20 @@ WSGI_APPLICATION = 'nyaydetect.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.environ.get('DATABASE_NAME'),
+        'NAME': 'nyaydetect',
         'USER': os.environ.get('DATABASE_USER'),
-        'PASSWORD': os.environ.get('DATABASE_PASSWORD'),
-        'HOST': os.environ.get('DATABASE_HOST', 'localhost'),
+        'PASSWORD': '91176',
+        'HOST': 'localhost',
         'PORT': os.environ.get('DATABASE_PORT', '5432'),
     }
 }
 
+# DATABASES['default'] = dj_database_url.parse("postgresql://nyaydetect_user:YTqmwJMvYB0En9ddfSgpsl0JXYnqGauZ@dpg-cvfad5popnds73b8892g-a.oregon-postgres.render.com/nyaydetect")
+DATABASES['default'] = dj_database_url.parse("postgresql://mistry_user:pHuEd5enB0u2xi3fOiAb7pcIU0EcTv4C@dpg-d0hdnoruibrs739kvf20-a.oregon-postgres.render.com/mistry")
 
-DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
+
+
+# DATABASES['default'] = dj_database_url.parse(os.environ.get('DATABASE_URL'))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
