@@ -7,8 +7,8 @@ from .models import Case, Suspect, Evidence
 
 # Configure Gemini API
 # genai.configure(api_key="YOUR_GEMINI_API_KEY")
-genai.configure(api_key="AIzaSyA5d52z8MQgOJj5Y-pkrYhl21VW432om3c")
-model = genai.GenerativeModel("gemini-1.5-pro")
+genai.configure(api_key="AIzaSyAnB5cM6t1PyhmiNiF_7AqkuYMKn1UOoUM")
+model = genai.GenerativeModel("gemini-2.0-flash")
 
 @api_view(["POST"])
 def generate_case(request):
@@ -21,26 +21,25 @@ def generate_case(request):
     prompt = f"""
         You are an expert crime fiction writer.
         
-        Generate a highly detailed, unique, and intriguing fictional crime case in {language}. The case should feel like a real investigation. Follow this strict format:
-        
-        Title: [A compelling title]
-        Description: [A brief but gripping overview of the crime]
-        
-        Suspect 1: Name - [Full Name], Age - [Age], Profession - [Job], Alibi - [Detailed alibi including time, location, witness if any]
-        Suspect 2: Name - [Full Name], Age - [Age], Profession - [Job], Alibi - [Detailed alibi]
-        Suspect 3: Name - [Full Name], Age - [Age], Profession - [Job], Alibi - [Detailed alibi]
-        
-        Evidence 1: [Detailed evidence description with where it was found and who it links to], Key Evidence - [Yes/No]
-        Evidence 2: [Detailed evidence description], Key Evidence - [Yes/No]
-        Evidence 3: [Optional: Add more depth if needed], Key Evidence - [Yes/No]
-        
-        Crime Execution: [Explain step-by-step how the crime was planned and executed. Include location, method, time of day, tools used, and sequence of events.]
-        
-        Culprit's Actions: [Reveal which suspect is the true culprit and how they manipulated others, tampered with evidence, and tried to cover their tracks. Make it clever.]
-        
-        Avoid clichés. Make each suspect's alibi plausible and layered. The tone should be immersive and realistic, like a detective novel. Write entirely in {language}.
-        """
+        Generate a highly detailed, unique, and intriguing fictional crime case. The case should feel like a real investigation. 
+        Use the following strict format, keeping the headers in English exactly as shown, but write all story content (titles, names, descriptions, alibis, etc.) in {language}:
 
+        Title: [A compelling title in {language}]
+        Description: [A brief but gripping overview of the crime in {language}]
+        
+        Suspect 1: Name - [Full Name in {language}], Age - [Age], Profession - [Job in {language}], Alibi - [Detailed alibi in {language}]
+        Suspect 2: Name - [Full Name in {language}], Age - [Age], Profession - [Job in {language}], Alibi - [Detailed alibi in {language}]
+        Suspect 3: Name - [Full Name in {language}], Age - [Age], Profession - [Job in {language}], Alibi - [Detailed alibi in {language}]
+        
+        Evidence 1: [Detailed evidence description in {language}], Key Evidence - [Yes/No]
+        Evidence 2: [Detailed evidence description in {language}], Key Evidence - [Yes/No]
+        Evidence 3: [Optional: Add more depth in {language}], Key Evidence - [Yes/No]
+        
+        Crime Execution: [Explain step-by-step how the crime was planned and executed in {language}]
+        Culprit's Actions: [Reveal the true culprit and their manipulation tactics in {language}]
+        
+        Make sure the story is immersive and realistic like a detective novel. Avoid clichés. Always write the content in {language} but KEEP THE SECTION HEADERS IN ENGLISH.
+    """
 
     try:
         response = model.generate_content(prompt)
